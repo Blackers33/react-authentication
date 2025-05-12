@@ -3,10 +3,9 @@ import {
 	faCheck,
 	faTimes,
 	faInfoCircle,
-	faL,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import "./register.css";
+import "./styles.css";
 import axios from "../../api/axios";
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
@@ -14,7 +13,6 @@ const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 
 export default function Register() {
 	const userRef = useRef<HTMLInputElement>(null);
-	const errRef = useRef(null);
 
 	const [user, setUser] = useState<string>("");
 	const [validName, setValidName] = useState<boolean>(false);
@@ -98,6 +96,7 @@ export default function Register() {
 					type='text'
 					placeholder='Enter your username'
 					onChange={(e) => setUser(e.target.value)}
+					value={user}
 					onFocus={() => setUserFocus(true)}
 					onBlur={() => setUserFocus(false)}
 				/>
@@ -125,6 +124,7 @@ export default function Register() {
 					aria-invalid={validPwd ? "false" : "true"}
 					placeholder='Enter your password'
 					onChange={(e) => setPwd(e.target.value)}
+					value={pwd}
 					onFocus={() => setPwdFocus(true)}
 					onBlur={() => setPwdFocus(false)}
 				/>
