@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import "./styles.css";
 import {
 	faCheck,
@@ -6,8 +6,11 @@ import {
 	faInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import AuthContext from "./AuthProvider";
+import axios from "../../api/axios";
 
 function Login() {
+	const { setAuth } = useContext(AuthContext);
 	const userRef = useRef<HTMLInputElement>(null);
 
 	const errRef = useRef(null);
@@ -25,8 +28,23 @@ function Login() {
 	}, [user, pwd]);
 
 	async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-		e.preventDefault()
-		console.log("handle submit", user, pwd);
+		e.preventDefault();
+		try {
+			const response = await axios.post(
+				"/login",
+				JSON.stringify({ user, pwd }),
+				{
+					headers: { "Content-Type": "application/json" },
+					withCredentials: true,
+				}
+			);
+			console.log(JSON.stringify(response?.data))
+			const accessToken = response?.data?.accessToken;
+			const roles = response?.data?.roles
+			setAuth({user, pwd, roles, accessToken})
+		} catch (err) {
+			console.log(err)
+		}
 	}
 
 	return (
